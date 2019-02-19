@@ -1,0 +1,1 @@
+CREATE KEYSPACE IF NOT EXISTS cassandra_ha with replication = { 'class': 'SimpleStrategy', 'replication_factor': 3 };

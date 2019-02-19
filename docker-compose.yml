@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+
+#  cassandra-project:
+#    build: .
+#    ports:
+#      - 5005:5005
+#    volumes:
+#      - "~/.sbt:/root/.sbt"
+#      - "~/.ivy2:/root/.ivy2"
+#      - ".:/opt/cassandra-project"
+#      - "/opt/cassandra-project/target"
+#      - "/opt/cassandra-project/project/target"
+#      - "/root/.sbt/1.0/plugins"
+
+  cassandra:
+    image: cassandra
+    ports:
+      - 9042:9042
+    volumes:
+      - "./cassandra:/opt/data/cassandra"
