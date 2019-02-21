@@ -8,7 +8,7 @@ RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.lis
     apt-get update && \
     apt-get install sbt -y
 
-WORKDIR /opt/cassandra-project
+WORKDIR /opt/database-ha-testing
 
 COPY . .
 
@@ -16,7 +16,7 @@ COPY . .
 #
 #ENTRYPOINT ["java"]
 #
-#CMD ["-jar", "target/scala-2.12/cassandra-project-assembly.jar"]
+#CMD ["-jar", "target/scala-2.12/database-ha-testing-assembly.jar"]
 
 EXPOSE 5005
 

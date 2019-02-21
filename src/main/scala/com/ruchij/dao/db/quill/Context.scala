@@ -1,4 +1,4 @@
-package com.ruchij.quill
+package com.ruchij.dao.db.quill
 import com.typesafe.config.{Config, ConfigValueFactory}
 import io.getquill.{CassandraAsyncContext, SnakeCase}
 

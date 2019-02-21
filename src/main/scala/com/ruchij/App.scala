@@ -1,12 +1,16 @@
 package com.ruchij
 import akka.actor.ActorSystem
+import ch.qos.logback.classic
+import ch.qos.logback.classic.Level
 import com.eed3si9n.ruchij.BuildInfo
-import com.ruchij.dao.QuillUserDao
-import com.ruchij.models.{CassandraResult, Random, User}
-import com.ruchij.quill.Context
-import com.typesafe.config.ConfigFactory
+import com.ruchij.dao.SlickUserTable
+import com.ruchij.models.{DatabaseResultsSummary, Random, User}
+import org.slf4j.{Logger, LoggerFactory}
 import scalaz.ReaderT
 import scalaz.std.scalaFuture.futureInstance
+import slick.basic.BasicBackend
+import slick.jdbc.PostgresProfile
+import slick.jdbc.PostgresProfile.api.Database
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -18,19 +22,32 @@ object App {
   def main(args: Array[String]): Unit = {
     implicit val actorSystem: ActorSystem = ActorSystem(BuildInfo.name)
 
-    val cassandraAsyncContext: AsyncCassandraContext =
-      Context.cassandraAsync(ConfigFactory.load().getConfig("cassandra"))
+//    val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)
+//
+//    Option(rootLogger).foreach {
+//      case logger: classic.Logger =>
+//        logger.setLevel(Level.TRACE)
+//
+//      case logger => logger.error("Not Logback logger")
+//    }
 
-    val userDao: QuillUserDao.type = QuillUserDao
+//    val cassandraAsyncContext: AsyncCassandraContext =
+//      Context.cassandraAsync(ConfigFactory.load().getConfig("cassandra"))
+//
+//    val userDao: QuillUserDao.type = QuillUserDao
+
+    val databaseConfig: PostgresProfile.backend.Database = Database.forConfig("postgres")
+    val userDao = new SlickUserTable(PostgresProfile)
 
     actorSystem.scheduler.schedule(2 seconds, 3 seconds) {
       val user = Random.user()
 
-      val result: ReaderT[Future, AsyncCassandraContext, CassandraResult[_]] =
+      val result: ReaderT[Future, BasicBackend#DatabaseDef, DatabaseResultsSummary[_]] =
         for {
+          _ <- userDao.init
           insertionResult <- userDao.insert(user)
 
-          _ <- ReaderT[Future, AsyncCassandraContext, Unit] { _ =>
+          _ <- ReaderT[Future, BasicBackend#DatabaseDef, Unit] { _ =>
             delay(1 second)
           }
 
@@ -40,15 +57,15 @@ object App {
           usersByAge <- userDao.getByAge(user.age)
           usersByFirstName <- userDao.getByFirstName(user.firstName)
         } yield
-          CassandraResult(insertionResult, userByEmail.headOption, userById.headOption, usersByAge, usersByFirstName)
+          DatabaseResultsSummary(insertionResult, userByEmail.headOption, userById.headOption, usersByAge, usersByFirstName)
 
-      result(cassandraAsyncContext).onComplete {
+      result(databaseConfig).onComplete {
         case Success(users) => println(users)
         case Failure(throwable) => System.err.println(throwable)
       }
     }
 
-    println("Cassandra HA testing started.")
+    println("Database HA testing started.")
   }
 
   def delay(duration: FiniteDuration)(implicit actorSystem: ActorSystem): Future[Unit] = {

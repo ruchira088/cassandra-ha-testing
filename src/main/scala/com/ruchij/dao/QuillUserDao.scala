@@ -4,8 +4,8 @@ import java.util.UUID
 
 import com.ruchij.exceptions.DuplicatedEntryException
 import com.ruchij.models.User
-import com.ruchij.quill.Decoders.dateTimeDecoder
-import com.ruchij.quill.Encoders.dateTimeEncoder
+import com.ruchij.dao.db.quill.Decoders.dateTimeDecoder
+import com.ruchij.dao.db.quill.Encoders.dateTimeEncoder
 import com.ruchij.{AsyncCassandraContext, FutureOpt}
 import scalaz.{OptionT, ReaderT}
 
@@ -15,6 +15,13 @@ import scala.language.higherKinds
 object QuillUserDao extends UserDao[AsyncCassandraContext] {
 
   override type InsertionResult = AsyncCassandraContext#RunActionResult
+
+  override type InitializationResult = Unit
+
+  override def init(implicit executionContext: ExecutionContext): ReaderT[Future, AsyncCassandraContext, Unit] =
+    ReaderT {
+      _ => Future.successful((): Unit)
+    }
 
   override def insert(
     user: User

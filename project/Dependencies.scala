@@ -14,7 +14,15 @@ object Dependencies
 
   lazy val scalazCore = "org.scalaz" %% "scalaz-core" % "7.2.27"
 
+  lazy val slick =  "com.typesafe.slick" %% "slick" % "3.3.0"
+
+  lazy val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % "3.3.0"
+  
+  lazy val postgresql = "org.postgresql" % "postgresql" % "42.2.5"
+
   lazy val typesafeConfig = "com.typesafe" % "config" % "1.3.2"
+
+  lazy val logback =  "ch.qos.logback" % "logback-classic" % "1.2.3"
 
   lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5"
 

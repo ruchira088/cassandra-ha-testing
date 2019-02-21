@@ -1,4 +1,4 @@
-package com.ruchij.quill
+package com.ruchij.dao.db.quill
 import java.util.Date
 
 import io.getquill.MappedEncoding

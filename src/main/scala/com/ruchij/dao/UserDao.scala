@@ -11,6 +11,10 @@ import scala.language.reflectiveCalls
 trait UserDao[A] {
   type InsertionResult
 
+  type InitializationResult
+
+  def init(implicit executionContext: ExecutionContext): ReaderT[Future, A, InitializationResult]
+
   def insert(user: User)(implicit executionContext: ExecutionContext): ReaderT[Future, A, InsertionResult]
 
   def getByEmail(email: String)(implicit executionContext: ExecutionContext): ReaderT[FutureOpt, A, User]
