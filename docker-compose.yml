@@ -2,17 +2,21 @@ version: "3"
 
 services:
 
-#  database-ha-testing:
-#    build: .
-#    ports:
-#      - 5005:5005
-#    volumes:
-#      - "~/.sbt:/root/.sbt"
-#      - "~/.ivy2:/root/.ivy2"
-#      - ".:/opt/database-ha-testing"
-#      - "/opt/database-ha-testing/target"
-#      - "/opt/database-ha-testing/project/target"
-#      - "/root/.sbt/1.0/plugins"
+  database-ha-testing:
+    build: .
+    volumes:
+      - "~/.sbt:/root/.sbt"
+      - "~/.ivy2:/root/.ivy2"
+      - ".:/opt/database-ha-testing"
+      - "/opt/database-ha-testing/target"
+      - "/opt/database-ha-testing/project/target"
+      - "/root/.sbt/1.0/plugins"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: users
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: 5432
 
 #  cassandra:
 #    image: cassandra

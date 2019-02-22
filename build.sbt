@@ -20,7 +20,7 @@ lazy val root =
     )
 
 lazy val rootDependencies =
-  Seq(akkaActor, javaFaker, jodaTime, quillCassandra, scalazCore, postgresql, slick, slickHikariCp, logback)
+  Seq(akkaActor, javaFaker, jodaTime, quillCassandra, scalazCore, postgresql, playJson, slick, slickHikariCp, scalaLogging, logback)
 
 lazy val rootTestDependencies =
   Seq(scalaTest, pegdown)

@@ -18,8 +18,10 @@ COPY . .
 #
 #CMD ["-jar", "target/scala-2.12/database-ha-testing-assembly.jar"]
 
-EXPOSE 5005
+#EXPOSE 5005
 
 ENTRYPOINT ["sbt"]
 
-CMD ["-jvm-debug", "5005", "run"]
+CMD ["run"]
+
+#CMD ["-jvm-debug", "5005", "run"]

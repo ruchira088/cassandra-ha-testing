@@ -17,10 +17,14 @@ object Dependencies
   lazy val slick =  "com.typesafe.slick" %% "slick" % "3.3.0"
 
   lazy val slickHikariCp = "com.typesafe.slick" %% "slick-hikaricp" % "3.3.0"
-  
+
   lazy val postgresql = "org.postgresql" % "postgresql" % "42.2.5"
 
+  lazy val playJson =  "com.typesafe.play" %% "play-json" % "2.7.1"
+
   lazy val typesafeConfig = "com.typesafe" % "config" % "1.3.2"
+
+  lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 
   lazy val logback =  "ch.qos.logback" % "logback-classic" % "1.2.3"
 
